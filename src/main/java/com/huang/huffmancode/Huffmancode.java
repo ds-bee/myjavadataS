@@ -14,10 +14,51 @@ public class Huffmancode {
         Node huffmanTree = createHuffmanTree(nodes);
         System.out.println(huffmanTree);
         System.out.println("前序遍历");
-        preOrder(huffmanTree);
+//        preOrder(huffmanTree);
+        huffmanTree.preOrder();
+        //测试生成的哈夫曼编码表
+//        getCode(huffmanTree,"",stringBuilder);
+        getCode(huffmanTree);
+        System.out.println("生成的哈夫曼表" + huffmanCode);
 
 
     }
+    //生成赫夫曼编码
+    //将赫夫曼编码表存放在Map<>形式中
+    static Map<Byte,String> huffmanCode = new HashMap<>();
+    static StringBuilder stringBuilder = new StringBuilder();
+    //32(空格对应的asc码值)->01
+    //在生成赫夫曼编码中，需要去拼接路径，定义一个stringbuilder存储某个叶子节点的路径
+
+    //重载方法，调用方便
+    private static void getCode(Node node){
+        if (node != null){
+            getCode(node.left,"",stringBuilder);
+            getCode(node.right,"",stringBuilder);
+        }
+    }
+
+    /**
+     *
+     * @param node 传入节点
+     * @param code 编码路径 右子节点1 左子节点 0
+     * @param stringBuilder 拼接路径
+     */
+    private static void getCode(Node node, String code, StringBuilder stringBuilder){
+
+        StringBuilder stringBuilder1 = new StringBuilder(stringBuilder);
+        stringBuilder1.append(code);
+        if(node != null  ){
+            if(node.data == null) {
+                getCode(node.left, "0", stringBuilder1);
+                getCode(node.right, "1",stringBuilder1);
+            }else{
+                huffmanCode.put(node.data,stringBuilder1.toString());
+            }
+        }
+
+    }
+
     private static void preOrder(Node node){
         if (node != null){
             node.preOrder();
